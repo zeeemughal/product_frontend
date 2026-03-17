@@ -9,8 +9,25 @@ const App = () => {
   const [description, setDescription] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [sortBy, setSortBy] = useState("name");
+  const [sortOrder, setSortOrder] = useState("asc");
 
-  const apiUrl = REACT_APP_API_URL; // Accessing environment variable
+  const apiUrl = REACT_APP_API_URL;
+
+  const filteredProducts = products
+    .filter(product => 
+      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    .sort((a, b) => {
+      const aVal = sortBy === "price" ? Number(a.price) : a.name.toLowerCase();
+      const bVal = sortBy === "price" ? Number(b.price) : b.name.toLowerCase();
+      if (sortOrder === "asc") {
+        return aVal > bVal ? 1 : -1;
+      }
+      return aVal < bVal ? 1 : -1;
+    });
 
   const fetchProducts = async () => {
     try {
@@ -91,6 +108,26 @@ const App = () => {
     <div style={{ fontFamily: "Arial, sans-serif" }}>
       <h1 style={{ color: "black" }}>Product List</h1>
       {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      <div style={{ marginBottom: "20px" }}>
+        <input
+          type="text"
+          placeholder="Search products..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          style={{ marginRight: "10px", padding: "5px", width: "200px" }}
+        />
+        <select
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          style={{ marginRight: "10px", padding: "5px" }}
+        >
+          <option value="name">Sort by Name</option>
+          <option value="price">Sort by Price</option>
+        </select>
+        <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")} style={{ padding: "5px 10px" }}>
+          {sortOrder === "asc" ? "↑" : "↓"}
+        </button>
+      </div>
       <form onSubmit={handleAddProduct} style={{ marginBottom: "20px" }}>
         <input
           type="text"
@@ -167,7 +204,7 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <tr key={product._id}>
               <td style={{ border: "1px solid black", padding: "8px" }}>
                 {product.name}
