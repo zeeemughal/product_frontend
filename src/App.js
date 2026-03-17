@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import axios from "axios";
 import {REACT_APP_API_URL}  from './config'
 
@@ -15,19 +15,21 @@ const App = () => {
 
   const apiUrl = REACT_APP_API_URL;
 
-  const filteredProducts = products
-    .filter(product => 
-      product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      product.description.toLowerCase().includes(searchTerm.toLowerCase())
-    )
-    .sort((a, b) => {
-      const aVal = sortBy === "price" ? Number(a.price) : a.name.toLowerCase();
-      const bVal = sortBy === "price" ? Number(b.price) : b.name.toLowerCase();
-      if (sortOrder === "asc") {
-        return aVal > bVal ? 1 : -1;
-      }
-      return aVal < bVal ? 1 : -1;
-    });
+  const filteredProducts = useMemo(() => {
+    return products
+      .filter(product => 
+        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+      )
+      .sort((a, b) => {
+        const aVal = sortBy === "price" ? Number(a.price) : a.name.toLowerCase();
+        const bVal = sortBy === "price" ? Number(b.price) : b.name.toLowerCase();
+        if (sortOrder === "asc") {
+          return aVal > bVal ? 1 : -1;
+        }
+        return aVal < bVal ? 1 : -1;
+      });
+  }, [products, searchTerm, sortBy, sortOrder]);
 
   const fetchProducts = async () => {
     try {
