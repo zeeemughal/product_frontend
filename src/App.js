@@ -18,14 +18,15 @@ const App = () => {
   const apiUrl = REACT_APP_API_URL;
 
   const filteredProducts = useMemo(() => {
+    const lowerSearchTerm = searchTerm.toLowerCase();
     return products
       .filter(product => 
-        product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        product.description.toLowerCase().includes(searchTerm.toLowerCase())
+        (product.name?.toLowerCase() || '').includes(lowerSearchTerm) ||
+        (product.description?.toLowerCase() || '').includes(lowerSearchTerm)
       )
       .sort((a, b) => {
-        const aVal = sortBy === "price" ? Number(a.price) : a.name.toLowerCase();
-        const bVal = sortBy === "price" ? Number(b.price) : b.name.toLowerCase();
+        const aVal = sortBy === "price" ? Number(a.price) : (a.name?.toLowerCase() || '');
+        const bVal = sortBy === "price" ? Number(b.price) : (b.name?.toLowerCase() || '');
         if (sortOrder === "asc") {
           return aVal > bVal ? 1 : -1;
         }
