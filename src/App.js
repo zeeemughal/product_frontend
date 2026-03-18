@@ -12,6 +12,8 @@ const App = () => {
   const [searchTerm, setSearchTerm] = useState("");
   const [sortBy, setSortBy] = useState("name");
   const [sortOrder, setSortOrder] = useState("asc");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [itemsPerPage, setItemsPerPage] = useState(5);
 
   const apiUrl = REACT_APP_API_URL;
 
@@ -30,6 +32,15 @@ const App = () => {
         return aVal < bVal ? 1 : -1;
       });
   }, [products, searchTerm, sortBy, sortOrder]);
+
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, sortBy, sortOrder]);
 
   const fetchProducts = async () => {
     try {
@@ -129,6 +140,18 @@ const App = () => {
         <button onClick={() => setSortOrder(sortOrder === "asc" ? "desc" : "asc")} style={{ padding: "5px 10px" }}>
           {sortOrder === "asc" ? "↑" : "↓"}
         </button>
+        <span style={{ marginLeft: "20px" }}>
+          Show:
+          <select
+            value={itemsPerPage}
+            onChange={(e) => setItemsPerPage(Number(e.target.value))}
+            style={{ marginLeft: "5px", padding: "5px" }}
+          >
+            <option value={5}>5</option>
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+          </select>
+        </span>
       </div>
       <form onSubmit={handleAddProduct} style={{ marginBottom: "20px" }}>
         <input
@@ -206,7 +229,7 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredProducts.map((product) => (
+          {currentProducts.map((product) => (
             <tr key={product._id}>
               <td style={{ border: "1px solid black", padding: "8px" }}>
                 {product.name}
@@ -241,6 +264,25 @@ const App = () => {
           ))}
         </tbody>
       </table>
+      {totalPages > 1 && (
+        <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+          <button
+            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+            disabled={currentPage === 1}
+            style={{ padding: "5px 10px" }}
+          >
+            Prev
+          </button>
+          <span>Page {currentPage} of {totalPages}</span>
+          <button
+            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+            disabled={currentPage === totalPages}
+            style={{ padding: "5px 10px" }}
+          >
+            Next
+          </button>
+        </div>
+      )}
     </div>
   );
 };
