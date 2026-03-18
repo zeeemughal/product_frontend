@@ -33,14 +33,17 @@ const App = () => {
       });
   }, [products, searchTerm, sortBy, sortOrder]);
 
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
-  const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+  const paginationInfo = useMemo(() => {
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
+    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
+    return { currentProducts, totalPages };
+  }, [filteredProducts, currentPage, itemsPerPage]);
 
   useEffect(() => {
     setCurrentPage(1);
-  }, [searchTerm, sortBy, sortOrder]);
+  }, [searchTerm, sortBy, sortOrder, itemsPerPage]);
 
   const fetchProducts = async () => {
     try {
@@ -229,7 +232,7 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          {currentProducts.map((product) => (
+          {paginationInfo.currentProducts.map((product) => (
             <tr key={product._id}>
               <td style={{ border: "1px solid black", padding: "8px" }}>
                 {product.name}
@@ -264,25 +267,23 @@ const App = () => {
           ))}
         </tbody>
       </table>
-      {totalPages > 1 && (
-        <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
-          <button
-            onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-            disabled={currentPage === 1}
-            style={{ padding: "5px 10px" }}
-          >
-            Prev
-          </button>
-          <span>Page {currentPage} of {totalPages}</span>
-          <button
-            onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
-            disabled={currentPage === totalPages}
-            style={{ padding: "5px 10px" }}
-          >
-            Next
-          </button>
-        </div>
-      )}
+      <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
+        <button
+          onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
+          disabled={currentPage === 1 || paginationInfo.totalPages === 0}
+          style={{ padding: "5px 10px" }}
+        >
+          Prev
+        </button>
+        <span>Page {currentPage} of {paginationInfo.totalPages || 1}</span>
+        <button
+          onClick={() => setCurrentPage(prev => Math.min(paginationInfo.totalPages, prev + 1))}
+          disabled={currentPage >= paginationInfo.totalPages || paginationInfo.totalPages === 0}
+          style={{ padding: "5px 10px" }}
+        >
+          Next
+        </button>
+      </div>
     </div>
   );
 };
