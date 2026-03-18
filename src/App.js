@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import {REACT_APP_API_URL}  from './config'
 
@@ -14,42 +14,24 @@ const App = () => {
   const [sortOrder, setSortOrder] = useState("asc");
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [totalCount, setTotalCount] = useState(0);
 
   const apiUrl = REACT_APP_API_URL;
 
-  const filteredProducts = useMemo(() => {
-    const lowerSearchTerm = searchTerm.toLowerCase();
-    return products
-      .filter(product => 
-        (product.name?.toLowerCase() || '').includes(lowerSearchTerm) ||
-        (product.description?.toLowerCase() || '').includes(lowerSearchTerm)
-      )
-      .sort((a, b) => {
-        const aVal = sortBy === "price" ? Number(a.price) : (a.name?.toLowerCase() || '');
-        const bVal = sortBy === "price" ? Number(b.price) : (b.name?.toLowerCase() || '');
-        if (sortOrder === "asc") {
-          return aVal > bVal ? 1 : -1;
-        }
-        return aVal < bVal ? 1 : -1;
-      });
-  }, [products, searchTerm, sortBy, sortOrder]);
-
-  const paginationInfo = useMemo(() => {
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentProducts = filteredProducts.slice(indexOfFirstItem, indexOfLastItem);
-    const totalPages = Math.ceil(filteredProducts.length / itemsPerPage);
-    return { currentProducts, totalPages };
-  }, [filteredProducts, currentPage, itemsPerPage]);
-
-  useEffect(() => {
-    setCurrentPage(1);
-  }, [searchTerm, sortBy, sortOrder, itemsPerPage]);
+  const totalPages = Math.ceil(totalCount / itemsPerPage);
 
   const fetchProducts = async () => {
     try {
-      const response = await axios.get(`${apiUrl}/products`);
-      setProducts(response.data);
+      const params = new URLSearchParams({
+        page: currentPage,
+        limit: itemsPerPage,
+        sortBy,
+        sortOrder,
+        search: searchTerm,
+      });
+      const response = await axios.get(`${apiUrl}/products?${params}`);
+      setProducts(response.data.products || response.data);
+      setTotalCount(response.data.total || response.data.length || 0);
     } catch (error) {
       console.error("Error fetching products:", error);
     }
@@ -57,7 +39,11 @@ const App = () => {
 
   useEffect(() => {
     fetchProducts();
-  }, [apiUrl]);
+  }, [apiUrl, currentPage, itemsPerPage, sortBy, sortOrder, searchTerm]);
+
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [searchTerm, sortBy, sortOrder, itemsPerPage]);
 
   const handleAddProduct = async (e) => {
     e.preventDefault();
@@ -233,7 +219,7 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          {paginationInfo.currentProducts.map((product) => (
+          {products.map((product) => (
             <tr key={product._id}>
               <td style={{ border: "1px solid black", padding: "8px" }}>
                 {product.name}
@@ -271,15 +257,15 @@ const App = () => {
       <div style={{ marginTop: "20px", display: "flex", alignItems: "center", justifyContent: "center", gap: "10px" }}>
         <button
           onClick={() => setCurrentPage(prev => Math.max(1, prev - 1))}
-          disabled={currentPage === 1 || paginationInfo.totalPages === 0}
+          disabled={currentPage === 1 || totalPages === 0}
           style={{ padding: "5px 10px" }}
         >
           Prev
         </button>
-        <span>Page {currentPage} of {paginationInfo.totalPages || 1}</span>
+        <span>Page {currentPage} of {totalPages || 1}</span>
         <button
-          onClick={() => setCurrentPage(prev => Math.min(paginationInfo.totalPages, prev + 1))}
-          disabled={currentPage >= paginationInfo.totalPages || paginationInfo.totalPages === 0}
+          onClick={() => setCurrentPage(prev => Math.min(totalPages, prev + 1))}
+          disabled={currentPage >= totalPages || totalPages === 0}
           style={{ padding: "5px 10px" }}
         >
           Next
