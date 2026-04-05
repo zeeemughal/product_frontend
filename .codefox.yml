@@ -6,4 +6,3 @@ reviews:
   slop_detection:
     enabled: true
     label: "low-quality-pr"
-    model: "google/gemini-2.0-flash"
