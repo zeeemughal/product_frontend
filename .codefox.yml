@@ -1,0 +1,4 @@
+# CodeFox Config Test - Skills Override
+skills:
+  - security
+  - performance
