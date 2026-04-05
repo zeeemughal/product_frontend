@@ -6,3 +6,4 @@ Modify the src/config.js file to assign the backend URL to the environment varia
 
 
 # Test
+# Test - Slop Detection
