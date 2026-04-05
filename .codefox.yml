@@ -1,0 +1,3 @@
+# CodeFox Config Test - Auto Review OFF (Fixed)
+auto_review:
+  enabled: false
