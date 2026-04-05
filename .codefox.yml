@@ -1,0 +1,5 @@
+# CodeFox Config Test - Slop Detection
+reviews:
+  slop_detection:
+    enabled: true
+    label: "codefox-slop-test"
