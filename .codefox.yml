@@ -1,0 +1,4 @@
+# CodeFox Config Test - Instructions
+# This tests if custom instructions are picked up from YAML
+instructions: |
+  Pay special attention to React best practices. All components should use functional components with hooks.

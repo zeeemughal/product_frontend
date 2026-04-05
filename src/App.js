@@ -10,7 +10,7 @@ const App = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [editingId, setEditingId] = useState(null);
 
-  const apiUrl = REACT_APP_API_URL; // Accessing environment variable
+  const apiUrl = REACT_APP_API_URL; // Accessing environment variable - TEST COMMENT
 
   const fetchProducts = async () => {
     try {
