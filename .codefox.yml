@@ -1,0 +1,12 @@
+# Phase 2 YAML Config Test
+reviews:
+  auto_title_placeholder: "[auto-title]"
+  auto_title_instructions: "Generate a clear, concise PR title in imperative mood (e.g., 'Add feature', 'Fix bug'). Keep it under 72 characters."
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true
+  commit_status: true
+  fail_commit_status: true
+  sequence_diagrams: true
+  changed_files_summary: true
+  estimate_code_review_effort: true
+  poem: true
