@@ -7,7 +7,7 @@ const App = () => {
   const [name, setName] = useState("");
   const [price, setPrice] = useState("");
   const [description, setDescription] = useState("");
-  const [successMessage, setSuccessMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState(""); // TEST
   const [editingId, setEditingId] = useState(null);
 
   const apiUrl = REACT_APP_API_URL; // Accessing environment variable

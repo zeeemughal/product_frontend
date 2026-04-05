@@ -1,0 +1,8 @@
+# CodeFox Config Test - Profile
+# This tests if review profile is picked up
+reviews:
+  profile: "assertive"
+  high_level_summary: true
+  sequence_diagrams: true
+  poem: true
+  changed_files_summary: true
