@@ -1,0 +1,4 @@
+# CodeFox Config Test - Auto Title
+reviews:
+  auto_title_placeholder: "@codefox auto"
+  auto_title_instructions: "Generate a concise PR title under 50 characters. Use imperative mood."
