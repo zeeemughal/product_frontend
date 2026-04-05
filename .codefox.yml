@@ -1,0 +1,3 @@
+# CodeFox Config Test - AI Model Override
+ai:
+  model: "anthropic/claude-3-5-sonnet-latest"
