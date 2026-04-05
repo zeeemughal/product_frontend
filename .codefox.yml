@@ -1,0 +1,7 @@
+# CodeFox Config Test - Path Filters
+reviews:
+  path_filters:
+    - "!src/**/*.js"
+  path_instructions:
+    - path: "**/*.js"
+      instructions: "Check for proper error handling"
