@@ -1,0 +1,9 @@
+# Test config for slop detection with custom label
+auto_review:
+  enabled: true
+
+reviews:
+  slop_detection:
+    enabled: true
+    label: "low-quality-pr"
+    model: "google/gemini-2.0-flash"
