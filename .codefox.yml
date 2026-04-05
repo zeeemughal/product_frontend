@@ -1,0 +1,5 @@
+# CodeFox Config Test - No Collapse
+reviews:
+  collapse_walkthrough: false
+  sequence_diagrams: true
+  poem: true
