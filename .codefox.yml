@@ -1,0 +1,67 @@
+# Phase 3 Feature Test Configuration
+
+reviews:
+  # Review profile
+  profile: "chill"
+
+  # Phase 2 features (already tested)
+  high_level_summary: true
+  high_level_summary_in_walkthrough: true
+  commit_status: true
+
+  # Phase 3 features being tested:
+
+  # Label suggestions with instructions
+  suggested_labels: true
+  labeling_instructions:
+    - label: "frontend"
+      instructions: "Apply when PR contains changes to React components, CSS, or UI files"
+    - label: "backend"
+      instructions: "Apply when PR contains changes to API routes, server-side logic, or database queries"
+    - label: "bugfix"
+      instructions: "Apply when PR fixes a bug or issue"
+    - label: "feature"
+      instructions: "Apply when PR adds new functionality"
+    - label: "refactor"
+      instructions: "Apply when PR refactors existing code without changing functionality"
+
+  # Auto-apply labels (set to false to see them as comment)
+  auto_apply_labels: false
+
+  # Suggest reviewers
+  suggested_reviewers: true
+
+  # Show fortune message while reviewing
+  in_progress_fortune: true
+
+  # Show review status in summary
+  review_status: true
+
+  # Show review details (filtered files, instructions, skills)
+  review_details: true
+
+  # Additional walkthrough features
+  sequence_diagrams: true
+  estimate_code_review_effort: true
+  changed_files_summary: true
+  poem: true
+
+# Auto review settings
+auto_review:
+  enabled: true
+  drafts: false
+
+# AI model (can override)
+ai:
+  model: "google/gemini-flash-latest"
+
+# Custom instructions
+instructions: |
+  Focus on code quality, security, and best practices.
+  Pay attention to potential bugs and edge cases.
+
+# Skills to use
+skills:
+  - security
+  - performance
+  - code-quality

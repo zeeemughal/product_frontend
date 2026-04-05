@@ -9,8 +9,16 @@ const App = () => {
   const [description, setDescription] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [editingId, setEditingId] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
 
   const apiUrl = REACT_APP_API_URL; // Accessing environment variable
+
+  // Filter products based on search term
+  const filteredProducts = products.filter(
+    (product) =>
+      product.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      product.description?.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const fetchProducts = async () => {
     try {
@@ -91,6 +99,13 @@ const App = () => {
     <div style={{ fontFamily: "Arial, sans-serif" }}>
       <h1 style={{ color: "black" }}>Product List</h1>
       {successMessage && <p style={{ color: "green" }}>{successMessage}</p>}
+      <input
+        type="text"
+        placeholder="Search products..."
+        value={searchTerm}
+        onChange={(e) => setSearchTerm(e.target.value)}
+        style={{ marginBottom: "10px", padding: "5px", width: "200px" }}
+      />
       <form onSubmit={handleAddProduct} style={{ marginBottom: "20px" }}>
         <input
           type="text"
@@ -167,7 +182,7 @@ const App = () => {
           </tr>
         </thead>
         <tbody>
-          {products.map((product) => (
+          {filteredProducts.map((product) => (
             <tr key={product._id}>
               <td style={{ border: "1px solid black", padding: "8px" }}>
                 {product.name}
