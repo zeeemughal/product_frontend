@@ -1,0 +1,7 @@
+# CodeFox Config Test - Sandbox Config
+sandbox:
+  enabled: true
+  install_deps: true
+  commit_fixes: false
+  network: true
+  timeout: 300
