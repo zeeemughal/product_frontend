@@ -1,0 +1,8 @@
+# CodeFox Config Test - Walkthrough Features
+reviews:
+  sequence_diagrams: true
+  poem: true
+  estimate_code_review_effort: true
+  changed_files_summary: true
+  collapse_walkthrough: true
+  high_level_summary: true
