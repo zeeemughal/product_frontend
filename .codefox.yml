@@ -1,0 +1,7 @@
+# CodeFox Config Test - Auto Review
+auto_review:
+  enabled: true
+  ignore_title_keywords:
+    - "WIP"
+    - "DONT REVIEW"
+  drafts: false
