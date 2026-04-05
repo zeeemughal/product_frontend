@@ -1,0 +1,4 @@
+# CodeFox Config Test - Ignore patterns
+ignore:
+  - "*.css"
+  - "yarn.lock"
